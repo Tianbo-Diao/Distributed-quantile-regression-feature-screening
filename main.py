@@ -17,9 +17,9 @@ m = 20
 n = int(N / m)
 k = round(np.log(N) * (N ** (1 / 5)) / 3)
 h = np.max([0.01, np.sqrt( tau_value * (1-tau_value) ) * (np.log(p) / N) ** (1 / 4)])
-beta_value = simulator.beta(N, p, type='hete')
+beta_value = simulator.beta(n, p, type='hete')
 
-Times = 50
+Times = 100
 # first column is sc, second column is cf, third column is ams, fourth column is psr, fifth column is fdr, sixth column is aee
 QR_index = np.zeros([Times, 6])
 pearson_index = np.zeros([Times, 6])
@@ -94,15 +94,15 @@ kendall_df = pd.DataFrame( np.mean(Kendall_index, axis=0).reshape(1,-1), columns
 sirs_df = pd.DataFrame( np.mean(SIRS_index, axis=0).reshape(1,-1), columns=['sc', 'cf', 'ams', 'psr', 'fdr', 'aee'])
 dc_df = pd.DataFrame( np.mean(DC_index, axis=0).reshape(1,-1), columns=['sc', 'cf', 'ams', 'psr', 'fdr', 'aee'])
 
-# print('qr_indx: \n', qr_df)
-# print('pearson_indx: \n', pearson_df)
-# print('kendall_indx: \n', kendall_df)
-# print('sirs_indx: \n', sirs_df)
-# print('dc_indx: \n', dc_df)
+print('qr_indx: \n', qr_df)
+print('pearson_indx: \n', pearson_df)
+print('kendall_indx: \n', kendall_df)
+print('sirs_indx: \n', sirs_df)
+print('dc_indx: \n', dc_df)
 
 
 
-with pd.ExcelWriter('hete_results_m=10.xlsx') as writer:
+with pd.ExcelWriter('hete_results_m=20.xlsx') as writer:
     qr_df.to_excel(writer, sheet_name='QR_index', index=False)
     pearson_df.to_excel(writer, sheet_name='pearson_index', index=False)
     kendall_df.to_excel(writer, sheet_name='Kendall_index', index=False)
