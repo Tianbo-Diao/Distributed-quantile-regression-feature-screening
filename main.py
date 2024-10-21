@@ -16,7 +16,7 @@ tau_value = 0.5
 m = 20
 n = int(N / m)
 k = round(np.log(N) * (N ** (1 / 5)) / 3)
-h = np.max([0.01, np.sqrt( tau_value * (1-tau_value) ) * (np.log(p) / N) ** (1 / 4)])
+h = np.max([0.01, np.sqrt( tau_value * (1-tau_value) ) * (np.log(p) / n) ** (1 / 4)])
 beta_value = simulator.beta(n, p, type='hete')
 
 Times = 100
