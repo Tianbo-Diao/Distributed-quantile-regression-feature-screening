@@ -1,7 +1,37 @@
 import numpy as np
 import scipy as sp
+import pandas as pd
 from numba import njit
+from time import time
 
+# result of method and computing time
+def measure_runtime(func, *args, **kwargs):
+    start_time = time()
+    result = func(*args, **kwargs)
+    runtime = time() - start_time
+    return result, runtime
+
+# metrics for various methods
+def method_metrics(method_result, beta_index, beta_value):
+    SC = int(np.all(np.in1d(beta_index, method_result['index'])))
+    CF = int(np.array_equal(method_result['index'], beta_index))
+    AMS = len(method_result['index'])
+    PSR = len(np.intersect1d(method_result['index'], beta_index)) / len(beta_index)
+    FDR = len(np.setdiff1d(method_result['index'], beta_index)) / len(method_result['index'])
+    ME = np.linalg.norm(beta_value - method_result['beta_value'])
+    return SC, CF, AMS, PSR, FDR, ME
+
+# mean, std calculation
+def mean_std(method_index):
+    mean_values = np.mean(method_index, axis=0)
+    std_values = np.std(method_index, axis=0)
+    # Create a DataFrame with 'mean' and 'std' as columns
+    result = pd.DataFrame({
+        'mean': mean_values,
+        'std': std_values
+    })
+    return result
+# index=['sc', 'cf', 'ams', 'psr', 'fdr', 'aee', 'time'])
 
 # check loss function 𝜌_𝜏(x)
 def check_fun(tau, x):
@@ -77,7 +107,7 @@ def soft_thresholding(x, lambda_value):
 
 
 
-# deriv_loss_i 是 损失函数的导数 ∇L_i(β)，X ,Y 是列表
+
 # gradient_beta is a list of gradient vector, each element is a column vector R^p
 def deriv_i(X, Y, m, n, h, tau, beta, kernel):
     gradient_beta = [0] * m
